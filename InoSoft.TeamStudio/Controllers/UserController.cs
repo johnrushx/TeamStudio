@@ -47,8 +47,7 @@ namespace InoSoft.TeamStudio.Controllers
         {
             if (ModelState.IsValid)
             {
-				//db.Users.AddObject(user);
-				//db.SaveChanges();
+                _userService.CreateUser(user);
                 return RedirectToAction("Index");  
             }
 
@@ -75,6 +74,7 @@ namespace InoSoft.TeamStudio.Controllers
 				//db.Users.Attach(user);
 				//db.ObjectStateManager.ChangeObjectState(user, EntityState.Modified);
 				//db.SaveChanges();
+                _userService.EditUser(user);
                 return RedirectToAction("Index");
             }
             return View(user);

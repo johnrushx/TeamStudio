@@ -42,6 +42,12 @@ namespace InoSoft.TeamStudio.Core.Entities
     
         #region ObjectSet Properties
     
+        public ObjectSet<aspnet_Users> aspnet_Users
+        {
+            get { return _aspnet_Users  ?? (_aspnet_Users = CreateObjectSet<aspnet_Users>("aspnet_Users")); }
+        }
+        private ObjectSet<aspnet_Users> _aspnet_Users;
+    
         public ObjectSet<Project> Projects
         {
             get { return _projects  ?? (_projects = CreateObjectSet<Project>("Projects")); }
@@ -71,6 +77,18 @@ namespace InoSoft.TeamStudio.Core.Entities
             get { return _versions  ?? (_versions = CreateObjectSet<Version>("Versions")); }
         }
         private ObjectSet<Version> _versions;
+    
+        public ObjectSet<LanguageLetter> LanguageLetters
+        {
+            get { return _languageLetters  ?? (_languageLetters = CreateObjectSet<LanguageLetter>("LanguageLetters")); }
+        }
+        private ObjectSet<LanguageLetter> _languageLetters;
+    
+        public ObjectSet<Letter> Letters
+        {
+            get { return _letters  ?? (_letters = CreateObjectSet<Letter>("Letters")); }
+        }
+        private ObjectSet<Letter> _letters;
 
         #endregion
     }

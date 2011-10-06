@@ -7,10 +7,14 @@ using System.Web.Routing;
 using System.Web.Security;
 using InoSoft.TeamStudio.Models;
 
+using InoSoft.TeamStudio.Core.Services;
+using InoSoft.TeamStudio.Core.Entities;
+
 namespace InoSoft.TeamStudio.Controllers
 {
 	public class AccountController : Controller
 	{
+        private UsersService _userService = new UsersService();
 
 		//
 		// GET: /Account/LogOn
@@ -83,7 +87,9 @@ namespace InoSoft.TeamStudio.Controllers
 
 				if (createStatus == MembershipCreateStatus.Success)
 				{
-					FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
+                    User addedUser = new User {FirstName=model.FirstName, LastName=model.LastName, UserName=model.UserName, Email=model.Email, AspnetUserId=_userService.GetAspUser(model.UserName).UserId};
+                    _userService.CreateUser(addedUser);
+                    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
 					return RedirectToAction("Index", "Home");
 				}
 				else

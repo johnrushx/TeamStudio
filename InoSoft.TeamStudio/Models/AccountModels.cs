@@ -44,7 +44,15 @@ namespace InoSoft.TeamStudio.Models
 
 	public class RegisterModel
 	{
-		[Required]
+        [Required]
+        [Display(Name = "First name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last name")]
+        public string LastName { get; set; }
+        
+        [Required]
 		[Display(Name = "User name")]
 		public string UserName { get; set; }
 

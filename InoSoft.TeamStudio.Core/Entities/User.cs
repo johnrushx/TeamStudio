@@ -48,9 +48,49 @@ namespace InoSoft.TeamStudio.Core.Entities
             get;
             set;
         }
+    
+        public virtual Nullable<System.Guid> AspnetUserId
+        {
+            get { return _aspnetUserId; }
+            set
+            {
+                try
+                {
+                    _settingFK = true;
+                    if (_aspnetUserId != value)
+                    {
+                        if (aspnet_Users != null && aspnet_Users.UserId != value)
+                        {
+                            aspnet_Users = null;
+                        }
+                        _aspnetUserId = value;
+                    }
+                }
+                finally
+                {
+                    _settingFK = false;
+                }
+            }
+        }
+        private Nullable<System.Guid> _aspnetUserId;
 
         #endregion
         #region Navigation Properties
+    
+        public virtual aspnet_Users aspnet_Users
+        {
+            get { return _aspnet_Users; }
+            set
+            {
+                if (!ReferenceEquals(_aspnet_Users, value))
+                {
+                    var previousValue = _aspnet_Users;
+                    _aspnet_Users = value;
+                    Fixupaspnet_Users(previousValue);
+                }
+            }
+        }
+        private aspnet_Users _aspnet_Users;
     
         public virtual ICollection<Project> Projects
         {
@@ -150,6 +190,32 @@ namespace InoSoft.TeamStudio.Core.Entities
 
         #endregion
         #region Association Fixup
+    
+        private bool _settingFK = false;
+    
+        private void Fixupaspnet_Users(aspnet_Users previousValue)
+        {
+            if (previousValue != null && previousValue.Users.Contains(this))
+            {
+                previousValue.Users.Remove(this);
+            }
+    
+            if (aspnet_Users != null)
+            {
+                if (!aspnet_Users.Users.Contains(this))
+                {
+                    aspnet_Users.Users.Add(this);
+                }
+                if (AspnetUserId != aspnet_Users.UserId)
+                {
+                    AspnetUserId = aspnet_Users.UserId;
+                }
+            }
+            else if (!_settingFK)
+            {
+                AspnetUserId = null;
+            }
+        }
     
         private void FixupProjects(object sender, NotifyCollectionChangedEventArgs e)
         {

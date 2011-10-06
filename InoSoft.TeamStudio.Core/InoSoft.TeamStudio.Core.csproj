@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -44,6 +45,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataManager.cs" />
+    <Compile Include="Entities\aspnet_Users.cs">
+      <DependentUpon>TeamStudioModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\LanguageLetter.cs">
+      <DependentUpon>TeamStudioModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Letter.cs">
+      <DependentUpon>TeamStudioModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entities\Project.cs">
       <DependentUpon>TeamStudioModel.tt</DependentUpon>
     </Compile>
@@ -74,6 +84,7 @@
     <Compile Include="Entities\Version.cs">
       <DependentUpon>TeamStudioModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\MessagesSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ProjectsService.cs" />
     <Compile Include="Services\TasksService.cs" />

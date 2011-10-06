@@ -4,14 +4,21 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TeamStudioModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="TeamStudioModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="TeamStudioModelStoreContainer">
+          <EntitySet Name="aspnet_Users" EntityType="TeamStudioModel.Store.aspnet_Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="LanguageLetters" EntityType="TeamStudioModel.Store.LanguageLetters" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Letters" EntityType="TeamStudioModel.Store.Letters" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Projects" EntityType="TeamStudioModel.Store.Projects" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Tasks" EntityType="TeamStudioModel.Store.Tasks" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Teams" EntityType="TeamStudioModel.Store.Teams" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Users" EntityType="TeamStudioModel.Store.Users" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UsersTeams" EntityType="TeamStudioModel.Store.UsersTeams" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Versions" EntityType="TeamStudioModel.Store.Versions" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_LanguageLetters_Letters" Association="TeamStudioModel.Store.FK_LanguageLetters_Letters">
+            <End Role="Letters" EntitySet="Letters" />
+            <End Role="LanguageLetters" EntitySet="LanguageLetters" />
+          </AssociationSet>
           <AssociationSet Name="FK_Projects_Teams" Association="TeamStudioModel.Store.FK_Projects_Teams">
             <End Role="Teams" EntitySet="Teams" />
             <End Role="Projects" EntitySet="Projects" />
@@ -36,6 +43,10 @@
             <End Role="Versions" EntitySet="Versions" />
             <End Role="Tasks" EntitySet="Tasks" />
           </AssociationSet>
+          <AssociationSet Name="FK_Users_aspnet_Users" Association="TeamStudioModel.Store.FK_Users_aspnet_Users">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
           <AssociationSet Name="FK_UsersTeams_Teams" Association="TeamStudioModel.Store.FK_UsersTeams_Teams">
             <End Role="Teams" EntitySet="Teams" />
             <End Role="UsersTeams" EntitySet="UsersTeams" />
@@ -49,6 +60,34 @@
             <End Role="Versions" EntitySet="Versions" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="aspnet_Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="LoweredUserName" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="MobileAlias" Type="nvarchar" MaxLength="16" />
+          <Property Name="IsAnonymous" Type="bit" Nullable="false" />
+          <Property Name="LastActivityDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LanguageLetters">
+          <Key>
+            <PropertyRef Name="LanguageLetterId" />
+          </Key>
+          <Property Name="LanguageLetterId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LetterId" Type="int" Nullable="false" />
+          <Property Name="LanguageId" Type="int" />
+          <Property Name="Template" Type="ntext" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Letters">
+          <Key>
+            <PropertyRef Name="LetterId" />
+          </Key>
+          <Property Name="LetterId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LetterName" Type="nvarchar" Nullable="false" MaxLength="250" />
+        </EntityType>
         <EntityType Name="Projects">
           <Key>
             <PropertyRef Name="ProjectId" />
@@ -69,6 +108,7 @@
           <Property Name="VersionId" Type="int" />
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="IsFixed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Teams">
           <Key>
@@ -82,10 +122,11 @@
             <PropertyRef Name="UserId" />
           </Key>
           <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="250" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="250" />
+          <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="250" />
+          <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="250" />
           <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="250" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="250" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="250" />
+          <Property Name="AspnetUserId" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="UsersTeams">
           <Key>
@@ -104,6 +145,18 @@
           <Property Name="VersionNum" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="ReleaseDate" Type="date" />
         </EntityType>
+        <Association Name="FK_LanguageLetters_Letters">
+          <End Role="Letters" Type="TeamStudioModel.Store.Letters" Multiplicity="1" />
+          <End Role="LanguageLetters" Type="TeamStudioModel.Store.LanguageLetters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Letters">
+              <PropertyRef Name="LetterId" />
+            </Principal>
+            <Dependent Role="LanguageLetters">
+              <PropertyRef Name="LetterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Projects_Teams">
           <End Role="Teams" Type="TeamStudioModel.Store.Teams" Multiplicity="1" />
           <End Role="Projects" Type="TeamStudioModel.Store.Projects" Multiplicity="*" />
@@ -176,6 +229,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Users_aspnet_Users">
+          <End Role="aspnet_Users" Type="TeamStudioModel.Store.aspnet_Users" Multiplicity="0..1" />
+          <End Role="Users" Type="TeamStudioModel.Store.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="AspnetUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UsersTeams_Teams">
           <End Role="Teams" Type="TeamStudioModel.Store.Teams" Multiplicity="1" />
           <End Role="UsersTeams" Type="TeamStudioModel.Store.UsersTeams" Multiplicity="*" />
@@ -212,200 +277,268 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TeamStudioModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="TeamStudioEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="aspnet_Users" EntityType="TeamStudioModel.aspnet_Users" />
           <EntitySet Name="Projects" EntityType="TeamStudioModel.Project" />
           <EntitySet Name="Tasks" EntityType="TeamStudioModel.Task" />
           <EntitySet Name="Teams" EntityType="TeamStudioModel.Team" />
           <EntitySet Name="Users" EntityType="TeamStudioModel.User" />
           <EntitySet Name="Versions" EntityType="TeamStudioModel.Version" />
+          <AssociationSet Name="FK_Users_aspnet_Users" Association="TeamStudioModel.FK_Users_aspnet_Users">
+            <End Role="aspnet_Users" EntitySet="aspnet_Users" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
           <AssociationSet Name="FK_Projects_Teams" Association="TeamStudioModel.FK_Projects_Teams">
-            <End Role="Teams" EntitySet="Teams" />
-            <End Role="Projects" EntitySet="Projects" />
+            <End Role="Team" EntitySet="Teams" />
+            <End Role="Project" EntitySet="Projects" />
           </AssociationSet>
           <AssociationSet Name="FK_Projects_Users" Association="TeamStudioModel.FK_Projects_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Projects" EntitySet="Projects" />
+            <End Role="User" EntitySet="Users" />
+            <End Role="Project" EntitySet="Projects" />
           </AssociationSet>
           <AssociationSet Name="FK_Tasks_Projects" Association="TeamStudioModel.FK_Tasks_Projects">
-            <End Role="Projects" EntitySet="Projects" />
-            <End Role="Tasks" EntitySet="Tasks" />
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="FK_Versions_Projects" Association="TeamStudioModel.FK_Versions_Projects">
-            <End Role="Projects" EntitySet="Projects" />
-            <End Role="Versions" EntitySet="Versions" />
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Version" EntitySet="Versions" />
           </AssociationSet>
           <AssociationSet Name="FK_Tasks_Tasks" Association="TeamStudioModel.FK_Tasks_Tasks">
-            <End Role="Tasks" EntitySet="Tasks" />
-            <End Role="Tasks1" EntitySet="Tasks" />
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="Task1" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="FK_Tasks_Users" Association="TeamStudioModel.FK_Tasks_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Tasks" EntitySet="Tasks" />
+            <End Role="User" EntitySet="Users" />
+            <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="FK_Tasks_Versions" Association="TeamStudioModel.FK_Tasks_Versions">
-            <End Role="Versions" EntitySet="Versions" />
-            <End Role="Tasks" EntitySet="Tasks" />
+            <End Role="Version" EntitySet="Versions" />
+            <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="UsersTeams" Association="TeamStudioModel.UsersTeams">
-            <End Role="Teams" EntitySet="Teams" />
-            <End Role="Users" EntitySet="Users" />
+            <End Role="Team" EntitySet="Teams" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="LanguageLetters" EntityType="TeamStudioModel.LanguageLetter" />
+          <EntitySet Name="Letters" EntityType="TeamStudioModel.Letter" />
+          <AssociationSet Name="FK_LanguageLetters_Letters" Association="TeamStudioModel.FK_LanguageLetters_Letters">
+            <End Role="Letter" EntitySet="Letters" />
+            <End Role="LanguageLetter" EntitySet="LanguageLetters" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="aspnet_Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Type="Guid" Name="ApplicationId" Nullable="false" />
+          <Property Type="Guid" Name="UserId" Nullable="false" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LoweredUserName" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MobileAlias" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="IsAnonymous" Nullable="false" />
+          <Property Type="DateTime" Name="LastActivityDate" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="TeamStudioModel.FK_Users_aspnet_Users" FromRole="aspnet_Users" ToRole="User" />
+        </EntityType>
         <EntityType Name="Project">
           <Key>
             <PropertyRef Name="ProjectId" />
           </Key>
-          <Property Name="ProjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="TeamId" Type="Int32" Nullable="false" />
-          <Property Name="ProjectManagerId" Type="Int32" />
-          <NavigationProperty Name="Team" Relationship="TeamStudioModel.FK_Projects_Teams" FromRole="Projects" ToRole="Teams" />
-          <NavigationProperty Name="User" Relationship="TeamStudioModel.FK_Projects_Users" FromRole="Projects" ToRole="Users" />
-          <NavigationProperty Name="Tasks" Relationship="TeamStudioModel.FK_Tasks_Projects" FromRole="Projects" ToRole="Tasks" />
-          <NavigationProperty Name="Versions" Relationship="TeamStudioModel.FK_Versions_Projects" FromRole="Projects" ToRole="Versions" />
+          <Property Type="Int32" Name="ProjectId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="TeamId" Nullable="false" />
+          <Property Type="Int32" Name="ProjectManagerId" />
+          <NavigationProperty Name="Team" Relationship="TeamStudioModel.FK_Projects_Teams" FromRole="Project" ToRole="Team" />
+          <NavigationProperty Name="User" Relationship="TeamStudioModel.FK_Projects_Users" FromRole="Project" ToRole="User" />
+          <NavigationProperty Name="Tasks" Relationship="TeamStudioModel.FK_Tasks_Projects" FromRole="Project" ToRole="Task" />
+          <NavigationProperty Name="Versions" Relationship="TeamStudioModel.FK_Versions_Projects" FromRole="Project" ToRole="Version" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
             <PropertyRef Name="TaskId" />
           </Key>
-          <Property Name="TaskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ParentTaskId" Type="Int32" />
-          <Property Name="ProjectId" Type="Int32" Nullable="false" />
-          <Property Name="AssigneeId" Type="Int32" Nullable="false" />
-          <Property Name="VersionId" Type="Int32" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Project" Relationship="TeamStudioModel.FK_Tasks_Projects" FromRole="Tasks" ToRole="Projects" />
-          <NavigationProperty Name="Tasks1" Relationship="TeamStudioModel.FK_Tasks_Tasks" FromRole="Tasks" ToRole="Tasks1" />
-          <NavigationProperty Name="Task1" Relationship="TeamStudioModel.FK_Tasks_Tasks" FromRole="Tasks1" ToRole="Tasks" />
-          <NavigationProperty Name="User" Relationship="TeamStudioModel.FK_Tasks_Users" FromRole="Tasks" ToRole="Users" />
-          <NavigationProperty Name="Version" Relationship="TeamStudioModel.FK_Tasks_Versions" FromRole="Tasks" ToRole="Versions" />
+          <Property Type="Int32" Name="TaskId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ParentTaskId" />
+          <Property Type="Int32" Name="ProjectId" Nullable="false" />
+          <Property Type="Int32" Name="AssigneeId" Nullable="false" />
+          <Property Type="Int32" Name="VersionId" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="IsFixed" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="TeamStudioModel.FK_Tasks_Projects" FromRole="Task" ToRole="Project" />
+          <NavigationProperty Name="Tasks1" Relationship="TeamStudioModel.FK_Tasks_Tasks" FromRole="Task" ToRole="Task1" />
+          <NavigationProperty Name="Task1" Relationship="TeamStudioModel.FK_Tasks_Tasks" FromRole="Task1" ToRole="Task" />
+          <NavigationProperty Name="User" Relationship="TeamStudioModel.FK_Tasks_Users" FromRole="Task" ToRole="User" />
+          <NavigationProperty Name="Version" Relationship="TeamStudioModel.FK_Tasks_Versions" FromRole="Task" ToRole="Version" />
         </EntityType>
         <EntityType Name="Team">
           <Key>
             <PropertyRef Name="TeamId" />
           </Key>
-          <Property Name="TeamId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Projects" Relationship="TeamStudioModel.FK_Projects_Teams" FromRole="Teams" ToRole="Projects" />
-          <NavigationProperty Name="Users" Relationship="TeamStudioModel.UsersTeams" FromRole="Teams" ToRole="Users" />
+          <Property Type="Int32" Name="TeamId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Projects" Relationship="TeamStudioModel.FK_Projects_Teams" FromRole="Team" ToRole="Project" />
+          <NavigationProperty Name="Users" Relationship="TeamStudioModel.UsersTeams" FromRole="Team" ToRole="User" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="LastName" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="UserName" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Projects" Relationship="TeamStudioModel.FK_Projects_Users" FromRole="Users" ToRole="Projects" />
-          <NavigationProperty Name="Tasks" Relationship="TeamStudioModel.FK_Tasks_Users" FromRole="Users" ToRole="Tasks" />
-          <NavigationProperty Name="Teams" Relationship="TeamStudioModel.UsersTeams" FromRole="Users" ToRole="Teams" />
+          <Property Type="Int32" Name="UserId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="Guid" Name="AspnetUserId" />
+          <NavigationProperty Name="aspnet_Users" Relationship="TeamStudioModel.FK_Users_aspnet_Users" FromRole="User" ToRole="aspnet_Users" />
+          <NavigationProperty Name="Projects" Relationship="TeamStudioModel.FK_Projects_Users" FromRole="User" ToRole="Project" />
+          <NavigationProperty Name="Tasks" Relationship="TeamStudioModel.FK_Tasks_Users" FromRole="User" ToRole="Task" />
+          <NavigationProperty Name="Teams" Relationship="TeamStudioModel.UsersTeams" FromRole="User" ToRole="Team" />
         </EntityType>
         <EntityType Name="Version">
           <Key>
             <PropertyRef Name="VersionId" />
           </Key>
-          <Property Name="VersionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProjectId" Type="Int32" Nullable="false" />
-          <Property Name="VersionNum" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="ReleaseDate" Type="DateTime" />
-          <NavigationProperty Name="Project" Relationship="TeamStudioModel.FK_Versions_Projects" FromRole="Versions" ToRole="Projects" />
-          <NavigationProperty Name="Tasks" Relationship="TeamStudioModel.FK_Tasks_Versions" FromRole="Versions" ToRole="Tasks" />
+          <Property Type="Int32" Name="VersionId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ProjectId" Nullable="false" />
+          <Property Type="String" Name="VersionNum" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ReleaseDate" />
+          <NavigationProperty Name="Project" Relationship="TeamStudioModel.FK_Versions_Projects" FromRole="Version" ToRole="Project" />
+          <NavigationProperty Name="Tasks" Relationship="TeamStudioModel.FK_Tasks_Versions" FromRole="Version" ToRole="Task" />
         </EntityType>
-        <Association Name="FK_Projects_Teams">
-          <End Role="Teams" Type="TeamStudioModel.Team" Multiplicity="1" />
-          <End Role="Projects" Type="TeamStudioModel.Project" Multiplicity="*" />
+        <Association Name="FK_Users_aspnet_Users">
+          <End Type="TeamStudioModel.aspnet_Users" Role="aspnet_Users" Multiplicity="0..1" />
+          <End Type="TeamStudioModel.User" Role="User" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Teams">
+            <Principal Role="aspnet_Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="AspnetUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Projects_Teams">
+          <End Type="TeamStudioModel.Team" Role="Team" Multiplicity="1" />
+          <End Type="TeamStudioModel.Project" Role="Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
               <PropertyRef Name="TeamId" />
             </Principal>
-            <Dependent Role="Projects">
+            <Dependent Role="Project">
               <PropertyRef Name="TeamId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Projects_Users">
-          <End Role="Users" Type="TeamStudioModel.User" Multiplicity="0..1" />
-          <End Role="Projects" Type="TeamStudioModel.Project" Multiplicity="*" />
+          <End Type="TeamStudioModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="TeamStudioModel.Project" Role="Project" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Users">
+            <Principal Role="User">
               <PropertyRef Name="UserId" />
             </Principal>
-            <Dependent Role="Projects">
+            <Dependent Role="Project">
               <PropertyRef Name="ProjectManagerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tasks_Projects">
-          <End Role="Projects" Type="TeamStudioModel.Project" Multiplicity="1" />
-          <End Role="Tasks" Type="TeamStudioModel.Task" Multiplicity="*" />
+          <End Type="TeamStudioModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="TeamStudioModel.Task" Role="Task" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Projects">
+            <Principal Role="Project">
               <PropertyRef Name="ProjectId" />
             </Principal>
-            <Dependent Role="Tasks">
+            <Dependent Role="Task">
               <PropertyRef Name="AssigneeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Versions_Projects">
-          <End Role="Projects" Type="TeamStudioModel.Project" Multiplicity="1" />
-          <End Role="Versions" Type="TeamStudioModel.Version" Multiplicity="*" />
+          <End Type="TeamStudioModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="TeamStudioModel.Version" Role="Version" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Projects">
+            <Principal Role="Project">
               <PropertyRef Name="ProjectId" />
             </Principal>
-            <Dependent Role="Versions">
+            <Dependent Role="Version">
               <PropertyRef Name="ProjectId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tasks_Tasks">
-          <End Role="Tasks" Type="TeamStudioModel.Task" Multiplicity="0..1" />
-          <End Role="Tasks1" Type="TeamStudioModel.Task" Multiplicity="*" />
+          <End Type="TeamStudioModel.Task" Role="Task" Multiplicity="0..1" />
+          <End Type="TeamStudioModel.Task" Role="Task1" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Tasks">
+            <Principal Role="Task">
               <PropertyRef Name="TaskId" />
             </Principal>
-            <Dependent Role="Tasks1">
+            <Dependent Role="Task1">
               <PropertyRef Name="ParentTaskId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tasks_Users">
-          <End Role="Users" Type="TeamStudioModel.User" Multiplicity="1" />
-          <End Role="Tasks" Type="TeamStudioModel.Task" Multiplicity="*" />
+          <End Type="TeamStudioModel.User" Role="User" Multiplicity="1" />
+          <End Type="TeamStudioModel.Task" Role="Task" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Users">
+            <Principal Role="User">
               <PropertyRef Name="UserId" />
             </Principal>
-            <Dependent Role="Tasks">
+            <Dependent Role="Task">
               <PropertyRef Name="AssigneeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tasks_Versions">
-          <End Role="Versions" Type="TeamStudioModel.Version" Multiplicity="0..1" />
-          <End Role="Tasks" Type="TeamStudioModel.Task" Multiplicity="*" />
+          <End Type="TeamStudioModel.Version" Role="Version" Multiplicity="0..1" />
+          <End Type="TeamStudioModel.Task" Role="Task" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Versions">
+            <Principal Role="Version">
               <PropertyRef Name="VersionId" />
             </Principal>
-            <Dependent Role="Tasks">
+            <Dependent Role="Task">
               <PropertyRef Name="VersionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="UsersTeams">
-          <End Role="Teams" Type="TeamStudioModel.Team" Multiplicity="*" />
-          <End Role="Users" Type="TeamStudioModel.User" Multiplicity="*" />
+          <End Type="TeamStudioModel.Team" Role="Team" Multiplicity="*" />
+          <End Type="TeamStudioModel.User" Role="User" Multiplicity="*" />
+        </Association>
+        <EntityType Name="LanguageLetter">
+          <Key>
+            <PropertyRef Name="LanguageLetterId" />
+          </Key>
+          <Property Type="Int32" Name="LanguageLetterId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LetterId" Nullable="false" />
+          <Property Type="Int32" Name="LanguageId" />
+          <Property Type="String" Name="Template" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Letter" Relationship="TeamStudioModel.FK_LanguageLetters_Letters" FromRole="LanguageLetter" ToRole="Letter" />
+        </EntityType>
+        <EntityType Name="Letter">
+          <Key>
+            <PropertyRef Name="LetterId" />
+          </Key>
+          <Property Type="Int32" Name="LetterId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="LetterName" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LanguageLetters" Relationship="TeamStudioModel.FK_LanguageLetters_Letters" FromRole="Letter" ToRole="LanguageLetter" />
+        </EntityType>
+        <Association Name="FK_LanguageLetters_Letters">
+          <End Type="TeamStudioModel.Letter" Role="Letter" Multiplicity="1" />
+          <End Type="TeamStudioModel.LanguageLetter" Role="LanguageLetter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Letter">
+              <PropertyRef Name="LetterId" />
+            </Principal>
+            <Dependent Role="LanguageLetter">
+              <PropertyRef Name="LetterId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -413,46 +546,99 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TeamStudioModelStoreContainer" CdmEntityContainer="TeamStudioEntities">
-          <EntitySetMapping Name="Projects"><EntityTypeMapping TypeName="TeamStudioModel.Project"><MappingFragment StoreEntitySet="Projects">
-            <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-            <ScalarProperty Name="Name" ColumnName="Name" />
-            <ScalarProperty Name="TeamId" ColumnName="TeamId" />
-            <ScalarProperty Name="ProjectManagerId" ColumnName="ProjectManagerId" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Tasks"><EntityTypeMapping TypeName="TeamStudioModel.Task"><MappingFragment StoreEntitySet="Tasks">
-            <ScalarProperty Name="TaskId" ColumnName="TaskId" />
-            <ScalarProperty Name="ParentTaskId" ColumnName="ParentTaskId" />
-            <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-            <ScalarProperty Name="AssigneeId" ColumnName="AssigneeId" />
-            <ScalarProperty Name="VersionId" ColumnName="VersionId" />
-            <ScalarProperty Name="Name" ColumnName="Name" />
-            <ScalarProperty Name="Description" ColumnName="Description" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Teams"><EntityTypeMapping TypeName="TeamStudioModel.Team"><MappingFragment StoreEntitySet="Teams">
-            <ScalarProperty Name="TeamId" ColumnName="TeamId" />
-            <ScalarProperty Name="Name" ColumnName="Name" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Users"><EntityTypeMapping TypeName="TeamStudioModel.User"><MappingFragment StoreEntitySet="Users">
-            <ScalarProperty Name="UserId" ColumnName="UserId" />
-            <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-            <ScalarProperty Name="LastName" ColumnName="LastName" />
-            <ScalarProperty Name="Email" ColumnName="Email" />
-            <ScalarProperty Name="UserName" ColumnName="UserName" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Versions"><EntityTypeMapping TypeName="TeamStudioModel.Version"><MappingFragment StoreEntitySet="Versions">
-            <ScalarProperty Name="VersionId" ColumnName="VersionId" />
-            <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-            <ScalarProperty Name="VersionNum" ColumnName="VersionNum" />
-            <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="aspnet_Users">
+            <EntityTypeMapping TypeName="TeamStudioModel.aspnet_Users">
+              <MappingFragment StoreEntitySet="aspnet_Users">
+                <ScalarProperty Name="LastActivityDate" ColumnName="LastActivityDate" />
+                <ScalarProperty Name="IsAnonymous" ColumnName="IsAnonymous" />
+                <ScalarProperty Name="MobileAlias" ColumnName="MobileAlias" />
+                <ScalarProperty Name="LoweredUserName" ColumnName="LoweredUserName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="TeamStudioModel.Project">
+              <MappingFragment StoreEntitySet="Projects">
+                <ScalarProperty Name="ProjectManagerId" ColumnName="ProjectManagerId" />
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tasks">
+            <EntityTypeMapping TypeName="TeamStudioModel.Task">
+              <MappingFragment StoreEntitySet="Tasks">
+                <ScalarProperty Name="IsFixed" ColumnName="IsFixed" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+                <ScalarProperty Name="AssigneeId" ColumnName="AssigneeId" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="ParentTaskId" ColumnName="ParentTaskId" />
+                <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teams">
+            <EntityTypeMapping TypeName="TeamStudioModel.Team">
+              <MappingFragment StoreEntitySet="Teams">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="TeamStudioModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="AspnetUserId" ColumnName="AspnetUserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Versions">
+            <EntityTypeMapping TypeName="TeamStudioModel.Version">
+              <MappingFragment StoreEntitySet="Versions">
+                <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
+                <ScalarProperty Name="VersionNum" ColumnName="VersionNum" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="VersionId" ColumnName="VersionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <AssociationSetMapping Name="UsersTeams" TypeName="TeamStudioModel.UsersTeams" StoreEntitySet="UsersTeams">
-            <EndProperty Name="Teams">
-              <ScalarProperty Name="TeamId" ColumnName="TeamId" />
-            </EndProperty>
-            <EndProperty Name="Users">
+            <EndProperty Name="User">
               <ScalarProperty Name="UserId" ColumnName="UserId" />
             </EndProperty>
+            <EndProperty Name="Team">
+              <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+            </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="LanguageLetters">
+            <EntityTypeMapping TypeName="TeamStudioModel.LanguageLetter">
+              <MappingFragment StoreEntitySet="LanguageLetters">
+                <ScalarProperty Name="Template" ColumnName="Template" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="LetterId" ColumnName="LetterId" />
+                <ScalarProperty Name="LanguageLetterId" ColumnName="LanguageLetterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Letters">
+            <EntityTypeMapping TypeName="TeamStudioModel.Letter">
+              <MappingFragment StoreEntitySet="Letters">
+                <ScalarProperty Name="LetterName" ColumnName="LetterName" />
+                <ScalarProperty Name="LetterId" ColumnName="LetterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -475,49 +661,65 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="TeamStudioModel">
-        <EntityTypeShape EntityType="TeamStudioModel.Project" Width="1.5" PointX="5.25" PointY="6.625" Height="2.5571907552083326" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamStudioModel.Task" Width="1.5" PointX="9.75" PointY="8.25" Height="3.3263964843749996" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamStudioModel.Team" Width="1.5" PointX="0.75" PointY="5.125" Height="1.7879850260416657" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamStudioModel.User" Width="1.5" PointX="3" PointY="8.125" Height="2.5571907552083317" IsExpanded="true" />
-        <EntityTypeShape EntityType="TeamStudioModel.Version" Width="1.5" PointX="7.5" PointY="10.875" Height="2.1725878906249996" IsExpanded="true" />
-        <AssociationConnector Association="TeamStudioModel.FK_Projects_Teams" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="5.8749994999999995" />
-          <ConnectorPoint PointX="6" PointY="5.8749994999999995" />
-          <ConnectorPoint PointX="6" PointY="6.625" />
+        <EntityTypeShape EntityType="TeamStudioModel.aspnet_Users" Width="1.5" PointX="3.75" PointY="1.125" Height="2.5571907552083317" />
+        <EntityTypeShape EntityType="TeamStudioModel.Project" Width="1.5" PointX="3" PointY="5.125" Height="2.5571907552083317" />
+        <EntityTypeShape EntityType="TeamStudioModel.Task" Width="1.5" PointX="8.25" PointY="6.625" Height="3.5186979166666674" />
+        <EntityTypeShape EntityType="TeamStudioModel.Team" Width="1.5" PointX="0.75" PointY="5.5" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="TeamStudioModel.User" Width="1.5" PointX="6" PointY="4.875" Height="2.9417936197916745" />
+        <EntityTypeShape EntityType="TeamStudioModel.Version" Width="1.5" PointX="5.25" PointY="9.625" Height="2.1725878906250031" />
+        <AssociationConnector Association="TeamStudioModel.FK_Users_aspnet_Users" >
+          <ConnectorPoint PointX="4.90625" PointY="3.6821907552083317" />
+          <ConnectorPoint PointX="4.90625" PointY="4.96875" />
+          <ConnectorPoint PointX="6" PointY="4.96875" />
         </AssociationConnector>
-        <AssociationConnector Association="TeamStudioModel.FK_Projects_Users" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="8.6535953776041659" />
-          <ConnectorPoint PointX="5.25" PointY="8.6535953776041659" />
+        <AssociationConnector Association="TeamStudioModel.FK_Projects_Teams" >
+          <ConnectorPoint PointX="2.25" PointY="6.3939925130208337" />
+          <ConnectorPoint PointX="3" PointY="6.3939925130208337" />
         </AssociationConnector>
-        <AssociationConnector Association="TeamStudioModel.FK_Tasks_Projects" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="8.7160953776041659" />
-          <ConnectorPoint PointX="9.75" PointY="8.7160953776041659" />
+        <AssociationConnector Association="TeamStudioModel.FK_Projects_Users" >
+          <ConnectorPoint PointX="6" PointY="6.4035953776041659" />
+          <ConnectorPoint PointX="4.5" PointY="6.4035953776041659" />
         </AssociationConnector>
-        <AssociationConnector Association="TeamStudioModel.FK_Versions_Projects" ManuallyRouted="false">
-          <ConnectorPoint PointX="6" PointY="9.1821907552083317" />
-          <ConnectorPoint PointX="6" PointY="11.9612939453125" />
-          <ConnectorPoint PointX="7.5" PointY="11.9612939453125" />
+        <AssociationConnector Association="TeamStudioModel.FK_Tasks_Projects" >
+          <ConnectorPoint PointX="3.75" PointY="7.6821907552083317" />
+          <ConnectorPoint PointX="3.75" PointY="8.7208968098958373" />
+          <ConnectorPoint PointX="4.0729191666666669" PointY="8.7208968098958373" />
+          <ConnectorPoint PointX="4.2395858333333329" PointY="8.7208968098958373" />
+          <ConnectorPoint PointX="8.25" PointY="8.7208968098958373" />
         </AssociationConnector>
-        <AssociationConnector Association="TeamStudioModel.FK_Tasks_Tasks" ManuallyRouted="false">
-          <ConnectorPoint PointX="10.281923076923077" PointY="11.576396484375" />
-          <ConnectorPoint PointX="10.281923076923077" PointY="11.826396484375" />
-          <ConnectorPoint PointX="10.728461538461538" PointY="11.826396484375" />
-          <ConnectorPoint PointX="10.728461538461538" PointY="11.576396484375" />
+        <AssociationConnector Association="TeamStudioModel.FK_Versions_Projects" >
+          <ConnectorPoint PointX="4.1562525" PointY="7.6821907552083317" />
+          <ConnectorPoint PointX="4.1562525" PointY="10.711293945312502" />
+          <ConnectorPoint PointX="5.25" PointY="10.711293945312502" />
         </AssociationConnector>
-        <AssociationConnector Association="TeamStudioModel.FK_Tasks_Users" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="9.9634407552083317" />
-          <ConnectorPoint PointX="5.916666666666667" PointY="9.9634407552083317" />
-          <ConnectorPoint PointX="6.083333333333333" PointY="9.9634407552083317" />
-          <ConnectorPoint PointX="9.75" PointY="9.9634407552083317" />
+        <AssociationConnector Association="TeamStudioModel.FK_Tasks_Tasks" >
+          <ConnectorPoint PointX="8.7819230769230767" PointY="10.143697916666667" />
+          <ConnectorPoint PointX="8.7819230769230767" PointY="10.393697916666667" />
+          <ConnectorPoint PointX="9.2284615384615378" PointY="10.393697916666667" />
+          <ConnectorPoint PointX="9.2284615384615378" PointY="10.143697916666667" />
         </AssociationConnector>
-        <AssociationConnector Association="TeamStudioModel.FK_Tasks_Versions" ManuallyRouted="false">
-          <ConnectorPoint PointX="9" PointY="11.2256982421875" />
-          <ConnectorPoint PointX="9.75" PointY="11.2256982421875" />
+        <AssociationConnector Association="TeamStudioModel.FK_Tasks_Users" >
+          <ConnectorPoint PointX="7.5" PointY="7.2208968098958373" />
+          <ConnectorPoint PointX="8.25" PointY="7.2208968098958373" />
         </AssociationConnector>
-        <AssociationConnector Association="TeamStudioModel.UsersTeams" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.5" PointY="6.9129850260416656" />
-          <ConnectorPoint PointX="1.5" PointY="9.4035953776041659" />
-          <ConnectorPoint PointX="3" PointY="9.4035953776041659" />
+        <AssociationConnector Association="TeamStudioModel.FK_Tasks_Versions" >
+          <ConnectorPoint PointX="6.75" PointY="9.8843489583333337" />
+          <ConnectorPoint PointX="8.25" PointY="9.8843489583333337" />
+        </AssociationConnector>
+        <AssociationConnector Association="TeamStudioModel.UsersTeams" >
+          <ConnectorPoint PointX="1.5" PointY="7.2879850260416674" />
+          <ConnectorPoint PointX="1.5" PointY="7.7807421875000031" />
+          <ConnectorPoint PointX="3.6666666666666665" PointY="7.7807421875000022" />
+          <ConnectorPoint PointX="3.8333333333333335" PointY="7.7807421875000031" />
+          <ConnectorPoint PointX="4.0729191666666669" PointY="7.7807421875000022" />
+          <ConnectorPoint PointX="4.2395858333333329" PointY="7.7807421875000031" />
+          <ConnectorPoint PointX="6" PointY="7.7807421875000031" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="TeamStudioModel.LanguageLetter" Width="1.5" PointX="8.625" PointY="0.875" Height="1.9802864583333317" />
+        <EntityTypeShape EntityType="TeamStudioModel.Letter" Width="1.5" PointX="6.375" PointY="1.125" Height="1.5956835937499996" />
+        <AssociationConnector Association="TeamStudioModel.FK_LanguageLetters_Letters" >
+          <ConnectorPoint PointX="7.875" PointY="1.9228417968749998" />
+          <ConnectorPoint PointX="8.625" PointY="1.9228417968749998" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

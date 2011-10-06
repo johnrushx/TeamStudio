@@ -121,6 +121,12 @@ namespace InoSoft.TeamStudio.Core.Entities
             get;
             set;
         }
+    
+        public virtual bool IsFixed
+        {
+            get;
+            set;
+        }
 
         #endregion
         #region Navigation Properties
