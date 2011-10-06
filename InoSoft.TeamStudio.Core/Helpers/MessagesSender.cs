@@ -6,6 +6,7 @@ using System.Text;
 using InoSoft.TeamStudio.Core.Entities;
 using System.Net.Mail;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace InoSoft.TeamStudio.Core.Helpers
 {
@@ -16,7 +17,10 @@ namespace InoSoft.TeamStudio.Core.Helpers
         //    using (var manager = new DataManager())
         //    {
         //        string ParsedText = manager.Context.LanguageLetters.SingleOrDefault(u => u.LanguageLetterId == languageLetterId).ToString();
-        //        ParsedText.
+        //        string Pattern = "{+[a-z]+}";
+        //        Regex RegularExpression = new Regex(Pattern);
+        //        RegularExpression.Match(ParsedText).
+
         //    }
         //}
         
@@ -28,8 +32,8 @@ namespace InoSoft.TeamStudio.Core.Helpers
             MailMessage Message = new MailMessage();
             Message.From = new MailAddress("inosoft@ymail.com");
             Message.To.Add(user.Email);
-            Message.Subject = "Круто же, получилось";
-            Message.Body = "Круто же, получилось";
+            Message.Subject = "Тема";
+            Message.Body = "Текст";
 
             Smtp.Send(Message);
         }
