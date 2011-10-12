@@ -27,7 +27,7 @@ namespace InoSoft.TeamStudio.Controllers
 
         public ActionResult Edit(int TaskId)
         {
-            Task Task = _tasksServise.GetTask(TaskId);
+            Task Task = _tasksServise.GetTask(TaskId);   
             Project Project = _projectServise.GetProjectAboutId(Task.ProjectId);
             Team Team = new Team();
             InoSoft.TeamStudio.Core.Entities.Version Version = _versionServise.GetVersion(Convert.ToInt32(Task.VersionId)); 

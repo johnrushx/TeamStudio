@@ -106,8 +106,11 @@
           <Property Name="ProjectId" Type="int" Nullable="false" />
           <Property Name="AssigneeId" Type="int" Nullable="false" />
           <Property Name="VersionId" Type="int" />
+          <Property Name="Priority" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
-          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="Description" Type="nvarchar" MaxLength="2500" />
+          <Property Name="DateCreate" Type="datetime" Nullable="false" />
+          <Property Name="DateFinishing" Type="datetime" Nullable="false" />
           <Property Name="IsFixed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Teams">
@@ -127,6 +130,7 @@
           <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="250" />
           <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="250" />
           <Property Name="AspnetUserId" Type="uniqueidentifier" />
+          <Property Name="UserLanguageId" Type="int" />
         </EntityType>
         <EntityType Name="UsersTeams">
           <Key>
@@ -374,6 +378,9 @@
           <NavigationProperty Name="Task1" Relationship="TeamStudioModel.FK_Tasks_Tasks" FromRole="Task1" ToRole="Task" />
           <NavigationProperty Name="User" Relationship="TeamStudioModel.FK_Tasks_Users" FromRole="Task" ToRole="User" />
           <NavigationProperty Name="Version" Relationship="TeamStudioModel.FK_Tasks_Versions" FromRole="Task" ToRole="Version" />
+          <Property Type="Int32" Name="Priority" Nullable="false" />
+          <Property Type="DateTime" Name="DateCreate" Nullable="false" />
+          <Property Type="DateTime" Name="DateFinishing" Nullable="false" />
         </EntityType>
         <EntityType Name="Team">
           <Key>
@@ -398,6 +405,7 @@
           <NavigationProperty Name="Projects" Relationship="TeamStudioModel.FK_Projects_Users" FromRole="User" ToRole="Project" />
           <NavigationProperty Name="Tasks" Relationship="TeamStudioModel.FK_Tasks_Users" FromRole="User" ToRole="Task" />
           <NavigationProperty Name="Teams" Relationship="TeamStudioModel.UsersTeams" FromRole="User" ToRole="Team" />
+          <Property Type="Int32" Name="UserLanguageId" />
         </EntityType>
         <EntityType Name="Version">
           <Key>
@@ -572,6 +580,9 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="TeamStudioModel.Task">
               <MappingFragment StoreEntitySet="Tasks">
+                <ScalarProperty Name="DateFinishing" ColumnName="DateFinishing" />
+                <ScalarProperty Name="DateCreate" ColumnName="DateCreate" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
                 <ScalarProperty Name="IsFixed" ColumnName="IsFixed" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -594,6 +605,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="TeamStudioModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserLanguageId" ColumnName="UserLanguageId" />
                 <ScalarProperty Name="AspnetUserId" ColumnName="AspnetUserId" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

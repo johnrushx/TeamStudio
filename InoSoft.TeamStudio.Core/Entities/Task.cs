@@ -127,6 +127,24 @@ namespace InoSoft.TeamStudio.Core.Entities
             get;
             set;
         }
+    
+        public virtual int Priority
+        {
+            get;
+            set;
+        }
+    
+        public virtual System.DateTime DateCreate
+        {
+            get;
+            set;
+        }
+    
+        public virtual System.DateTime DateFinishing
+        {
+            get;
+            set;
+        }
 
         #endregion
         #region Navigation Properties

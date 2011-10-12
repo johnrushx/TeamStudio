@@ -23,6 +23,13 @@
            <div>
             @Html.DisplayText("Project")
         </div>
+
+                      <div class="editor-label">
+            @Html.LabelFor(model => model.DateCreate)
+        </div>
+        <div class="editor-field">
+            @Html.DisplayFor(model => model.DateCreate)
+        </div>
          
          @if (Model.ParentTaskId != null)
          { 
@@ -72,6 +79,22 @@
         <div class="editor-field">
             @Html.EditorFor(model => model.IsFixed)
             @Html.ValidationMessageFor(model => model.IsFixed)
+        </div>
+
+          <div class="editor-label">
+            @Html.LabelFor(model => model.Priority)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Priority)
+            @Html.ValidationMessageFor(model => model.Priority)
+        </div>
+
+              <div class="editor-label">
+            @Html.LabelFor(model => model.DateFinishing)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DateFinishing)
+            @Html.ValidationMessageFor(model => model.DateFinishing)
         </div>
 
         <p>

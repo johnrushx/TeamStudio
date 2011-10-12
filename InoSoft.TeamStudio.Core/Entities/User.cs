@@ -73,6 +73,12 @@ namespace InoSoft.TeamStudio.Core.Entities
             }
         }
         private Nullable<System.Guid> _aspnetUserId;
+    
+        public virtual Nullable<int> UserLanguageId
+        {
+            get;
+            set;
+        }
 
         #endregion
         #region Navigation Properties
