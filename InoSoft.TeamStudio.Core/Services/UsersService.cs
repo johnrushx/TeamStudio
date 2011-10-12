@@ -17,7 +17,7 @@ namespace InoSoft.TeamStudio.Core.Services
 			}
 		}
 
-		public User GetUserById(int id)
+		public User GetUser(int id)
 		{
 			using (var manager = new DataManager())
 			{
@@ -25,37 +25,54 @@ namespace InoSoft.TeamStudio.Core.Services
 			}
 		}
 
-        public void CreateUser(User newUser)
+        public User GetUser(string Name)
         {
             using (var manager = new DataManager())
             {
-                manager.Context.Users.AddObject(newUser);
-                manager.Context.SaveChanges();
-                //MessagesSender Sender = new MessagesSender();
-                //Sender.Send(newUser);
+                return manager.Context.Users.SingleOrDefault(u => u.UserName == Name);
             }
         }
 
-        public void EditUser(User user)
+        public List<User> GetUsersAboutTeam(int TeamId)
         {
             using (var manager = new DataManager())
             {
-                User editedUser = new User { UserId = user.UserId };
-                manager.Context.Users.Attach(editedUser);
-                editedUser.FirstName = user.FirstName;
-                editedUser.LastName = user.LastName;
-                editedUser.UserName = user.UserName;
-                editedUser.Email = user.Email;
-                manager.Context.SaveChanges();
+
+                return manager.Context.Teams.SingleOrDefault(t => t.TeamId == TeamId).Users.ToList<User>();
             }
         }
 
-        public aspnet_Users GetAspUser(string userName)
-        {
-            using (var manager = new DataManager())
-            {
-                return manager.Context.aspnet_Users.SingleOrDefault(u => u.UserName == userName);
-            }
-        }
+		public void CreateUser(User newUser)
+		{
+			using (var manager = new DataManager())
+			{
+				manager.Context.Users.AddObject(newUser);
+				manager.Context.SaveChanges();
+				//MessagesSender Sender = new MessagesSender();
+				//Sender.Send(newUser);
+			}
+		}
+
+		public void EditUser(User user)
+		{
+			using (var manager = new DataManager())
+			{
+				User editedUser = new User { UserId = user.UserId };
+				manager.Context.Users.Attach(editedUser);
+				editedUser.FirstName = user.FirstName;
+				editedUser.LastName = user.LastName;
+				editedUser.UserName = user.UserName;
+				editedUser.Email = user.Email;
+				manager.Context.SaveChanges();
+			}
+		}
+
+		public aspnet_Users GetAspUser(string userName)
+		{
+			using (var manager = new DataManager())
+			{
+				return manager.Context.aspnet_Users.SingleOrDefault(u => u.UserName == userName);
+			}
+		}
 	}
 }

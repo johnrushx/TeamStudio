@@ -5,4 +5,10 @@
 <h2>@ViewBag.Message</h2>
 <p>
     @Html.ActionLink("Go to users page", "Index", "User")
+    @if(Request.IsAuthenticated) {
+    <text> @Html.ActionLink("Go to you Tasks list", "Index", "Task") </text>
+}
+else {
+    @:[ @Html.ActionLink("Log On", "LogOn", "Account") ]
+}
 </p>

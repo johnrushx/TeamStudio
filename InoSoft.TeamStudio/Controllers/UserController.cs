@@ -27,7 +27,7 @@ namespace InoSoft.TeamStudio.Controllers
 
         public ViewResult Details(int id)
 		{
-			User user = _userService.GetUserById(id);
+			User user = _userService.GetUser(id);
             return View(user);
         }
 
@@ -59,7 +59,7 @@ namespace InoSoft.TeamStudio.Controllers
  
         public ActionResult Edit(int id)
 		{
-			User user = _userService.GetUserById(id);
+			User user = _userService.GetUser(id);
             return View(user);
         }
 
@@ -85,7 +85,7 @@ namespace InoSoft.TeamStudio.Controllers
  
         public ActionResult Delete(int id)
         {
-			User user = _userService.GetUserById(id);
+			User user = _userService.GetUser(id);
             return View(user);
         }
 

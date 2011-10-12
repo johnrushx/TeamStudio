@@ -662,34 +662,36 @@
     <Diagrams>
       <Diagram Name="TeamStudioModel">
         <EntityTypeShape EntityType="TeamStudioModel.aspnet_Users" Width="1.5" PointX="3.75" PointY="1.125" Height="2.5571907552083317" />
-        <EntityTypeShape EntityType="TeamStudioModel.Project" Width="1.5" PointX="3" PointY="5.125" Height="2.5571907552083317" />
+        <EntityTypeShape EntityType="TeamStudioModel.Project" Width="1.5" PointX="3.125" PointY="4" Height="2.5571907552083317" />
         <EntityTypeShape EntityType="TeamStudioModel.Task" Width="1.5" PointX="8.25" PointY="6.625" Height="3.5186979166666674" />
         <EntityTypeShape EntityType="TeamStudioModel.Team" Width="1.5" PointX="0.75" PointY="5.5" Height="1.7879850260416674" />
-        <EntityTypeShape EntityType="TeamStudioModel.User" Width="1.5" PointX="6" PointY="4.875" Height="2.9417936197916745" />
+        <EntityTypeShape EntityType="TeamStudioModel.User" Width="1.5" PointX="6" PointY="5.375" Height="2.9417936197916745" />
         <EntityTypeShape EntityType="TeamStudioModel.Version" Width="1.5" PointX="5.25" PointY="9.625" Height="2.1725878906250031" />
         <AssociationConnector Association="TeamStudioModel.FK_Users_aspnet_Users" >
-          <ConnectorPoint PointX="4.90625" PointY="3.6821907552083317" />
-          <ConnectorPoint PointX="4.90625" PointY="4.96875" />
-          <ConnectorPoint PointX="6" PointY="4.96875" />
+          <ConnectorPoint PointX="4.96875" PointY="3.6821907552083317" />
+          <ConnectorPoint PointX="4.96875" PointY="7.4682421875000031" />
+          <ConnectorPoint PointX="6" PointY="7.4682421875000031" />
         </AssociationConnector>
         <AssociationConnector Association="TeamStudioModel.FK_Projects_Teams" >
-          <ConnectorPoint PointX="2.25" PointY="6.3939925130208337" />
-          <ConnectorPoint PointX="3" PointY="6.3939925130208337" />
+          <ConnectorPoint PointX="2.25" PointY="6.0285953776041659" />
+          <ConnectorPoint PointX="3.125" PointY="6.0285953776041659" />
         </AssociationConnector>
         <AssociationConnector Association="TeamStudioModel.FK_Projects_Users" >
-          <ConnectorPoint PointX="6" PointY="6.4035953776041659" />
-          <ConnectorPoint PointX="4.5" PointY="6.4035953776041659" />
+          <ConnectorPoint PointX="6" PointY="5.9660953776041659" />
+          <ConnectorPoint PointX="5.052083333333333" PointY="5.966095377604165" />
+          <ConnectorPoint PointX="4.885416666666667" PointY="5.9660953776041659" />
+          <ConnectorPoint PointX="4.625" PointY="5.9660953776041659" />
         </AssociationConnector>
         <AssociationConnector Association="TeamStudioModel.FK_Tasks_Projects" >
-          <ConnectorPoint PointX="3.75" PointY="7.6821907552083317" />
-          <ConnectorPoint PointX="3.75" PointY="8.7208968098958373" />
-          <ConnectorPoint PointX="4.0729191666666669" PointY="8.7208968098958373" />
-          <ConnectorPoint PointX="4.2395858333333329" PointY="8.7208968098958373" />
-          <ConnectorPoint PointX="8.25" PointY="8.7208968098958373" />
+          <ConnectorPoint PointX="4.625" PointY="4.65625" />
+          <ConnectorPoint PointX="4.885416666666667" PointY="4.6562499999999991" />
+          <ConnectorPoint PointX="5.052083333333333" PointY="4.65625" />
+          <ConnectorPoint PointX="9" PointY="4.65625" />
+          <ConnectorPoint PointX="9" PointY="6.625" />
         </AssociationConnector>
         <AssociationConnector Association="TeamStudioModel.FK_Versions_Projects" >
-          <ConnectorPoint PointX="4.1562525" PointY="7.6821907552083317" />
-          <ConnectorPoint PointX="4.1562525" PointY="10.711293945312502" />
+          <ConnectorPoint PointX="3.875" PointY="6.5571907552083317" />
+          <ConnectorPoint PointX="3.875" PointY="10.711293945312502" />
           <ConnectorPoint PointX="5.25" PointY="10.711293945312502" />
         </AssociationConnector>
         <AssociationConnector Association="TeamStudioModel.FK_Tasks_Tasks" >
@@ -699,8 +701,8 @@
           <ConnectorPoint PointX="9.2284615384615378" PointY="10.143697916666667" />
         </AssociationConnector>
         <AssociationConnector Association="TeamStudioModel.FK_Tasks_Users" >
-          <ConnectorPoint PointX="7.5" PointY="7.2208968098958373" />
-          <ConnectorPoint PointX="8.25" PointY="7.2208968098958373" />
+          <ConnectorPoint PointX="7.5" PointY="7.4708968098958373" />
+          <ConnectorPoint PointX="8.25" PointY="7.4708968098958373" />
         </AssociationConnector>
         <AssociationConnector Association="TeamStudioModel.FK_Tasks_Versions" >
           <ConnectorPoint PointX="6.75" PointY="9.8843489583333337" />
@@ -708,12 +710,10 @@
         </AssociationConnector>
         <AssociationConnector Association="TeamStudioModel.UsersTeams" >
           <ConnectorPoint PointX="1.5" PointY="7.2879850260416674" />
-          <ConnectorPoint PointX="1.5" PointY="7.7807421875000031" />
-          <ConnectorPoint PointX="3.6666666666666665" PointY="7.7807421875000022" />
-          <ConnectorPoint PointX="3.8333333333333335" PointY="7.7807421875000031" />
-          <ConnectorPoint PointX="4.0729191666666669" PointY="7.7807421875000022" />
-          <ConnectorPoint PointX="4.2395858333333329" PointY="7.7807421875000031" />
-          <ConnectorPoint PointX="6" PointY="7.7807421875000031" />
+          <ConnectorPoint PointX="1.5" PointY="7.8002146809895834" />
+          <ConnectorPoint PointX="3.7916666666666665" PointY="7.8002146809895825" />
+          <ConnectorPoint PointX="3.9583333333333335" PointY="7.8002146809895834" />
+          <ConnectorPoint PointX="6" PointY="7.8002146809895834" />
         </AssociationConnector>
         <EntityTypeShape EntityType="TeamStudioModel.LanguageLetter" Width="1.5" PointX="8.625" PointY="0.875" Height="1.9802864583333317" />
         <EntityTypeShape EntityType="TeamStudioModel.Letter" Width="1.5" PointX="6.375" PointY="1.125" Height="1.5956835937499996" />
