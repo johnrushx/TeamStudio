@@ -48,8 +48,8 @@ namespace InoSoft.TeamStudio.Core.Services
 			{
 				manager.Context.Users.AddObject(newUser);
 				manager.Context.SaveChanges();
-				//MessagesSender Sender = new MessagesSender();
-				//Sender.Send(newUser);
+                MessagesSender Sender = new MessagesSender();
+                Sender.Send(newUser);
 			}
 		}
 
