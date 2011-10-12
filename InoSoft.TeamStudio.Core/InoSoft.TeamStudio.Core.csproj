@@ -89,6 +89,7 @@
     <Compile Include="Services\ProjectsService.cs" />
     <Compile Include="Services\TasksService.cs" />
     <Compile Include="Services\UsersService.cs" />
+    <Compile Include="Services\VersionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
